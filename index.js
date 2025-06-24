@@ -225,29 +225,27 @@ bot.command('version', async (ctx) => {
 });
 
 
-bot.command('id', async (ctx) => {
-  const chat = ctx.chat;
-  const start = Date.now();
-  const sent = await ctx.reply('🔍 Fetching chat info...');
 
-  const latency = Date.now() - start;
+bot.command('channelid', async (ctx) => {
+  const input = ctx.message.text.split(' ').slice(1).join(' ');
+  if (!input) return ctx.reply('⚠️ Please provide the channel username or invite link.');
 
-  const message = `╭─『 *🤖 SMILE-AI CHAT INFO* 』─╮
+  try {
+    // Try to get chat info by username or invite link
+    const chat = await ctx.telegram.getChat(input);
+
+    const message = `╭─『 *📢 CHANNEL INFO* 』─╮
 │
-│ 🆔 *Chat ID:* chat.id
-│ 🏷️ *Chat Type:*{chat.type}
-│ 👤 *Chat Title:* chat.title || 'N/A'
-│ 👥 *Username:*{chat.username ? '@' + chat.username : 'N/A'}
-│ 📶 *Latency:* ${latency} ms
+│ 🆔 *Channel ID:* chat.id
+│ 🏷️ *Title:*{chat.title}
+│ 📛 *Username:* ${chat.username ? '@' + chat.username : 'N/A'}
 │
 ╰────────────────────────╯`;
 
-  await ctx.telegram.editMessageText(
-    sent.chat.id,
-    sent.message_id,
-    undefined,
-    message
-  );
+    ctx.reply(message);
+  } catch (error) {
+    ctx.reply('❌ Failed to get channel info. Make sure the username or link is valid and the bot is a member.');
+  }
 });
 
 
