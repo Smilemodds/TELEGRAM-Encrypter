@@ -199,7 +199,53 @@ bot.command('ping', async (ctx) => {
     message
   );
 });
-  
+
+
+bot.command('version', async (ctx) => {
+  const versionText = `
+╭──〔 *📦 BOT VERSION INFO* 〕──
+│ 🤖 *Bot:* Mr Smile ENC Bot
+│ 🆙 *Version:* 4.0.2
+│ 📅 *Updated:* June 2025
+│ 🧑‍💻 *Developer:* Mr Smile
+╰────────────────────────────`;
+
+  await ctx.replyWithPhoto(
+    { url: 'https://files.catbox.moe/4ga40i.png' },
+    {
+      caption: versionText,
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '📢 Support Channel', url: 'https://whatsapp.com/channel/0029VaesBAXJJhzefVszDu3h' }],
+          [{ text: '👨‍💻 Developer', url: 'https://wa.me/254107065646' }]
+        ]
+      }
+    }
+  );
+});
+
+
+bot.command('alive', async (ctx) => {
+  await ctx.replyWithPhoto(
+    { url: 'https://files.catbox.moe/4ga40i.png' },
+    {
+      caption: `
+╭─〔 *📡 SYSTEM ONLINE* 〕─╮
+│ 🤖 *BOT:* Mr Smile ENC Bot
+│ 👤 *OWNER:* Mr Smile
+│ 💡 *STATUS:* Active & Responsive
+│ 🔋 *POWERED BY:* Node.js
+│ 📅 *DATE:* new Date().toLocaleDateString()
+│ ⏱ *TIME:*{new Date().toLocaleTimeString()}
+╰────────────────────╯
+
+🛠 Use /help to see available commands.`,
+    }
+  );
+});
+
+
+
 
 // Launch bot with long polling
 bot.launch();
