@@ -111,7 +111,7 @@ bot.command('help', (ctx) => {
 bot.command('smile', async (ctx) => {
   try {
     await ctx.replyWithPhoto(
-      { url: 'https://files.catbox.moe/9liluf.jpg' }, // Replace with your image URL
+      { url: 'https://files.catbox.moe/4ga40i.png' }, // Replace with your image URL
       {
         caption: ` 𝐌𝐑 𝐒𝐌𝐈𝐋𝐄 𝐄𝐍𝐂 𝐁𝐎𝐓
 
