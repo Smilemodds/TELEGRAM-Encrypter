@@ -119,12 +119,19 @@ bot.command('smile', async (ctx) => {
 𝐑𝐎𝐋𝐄 : 𝐄𝐍𝐂 𝐁𝐎𝐓
 
 𝐌𝐘 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒
-┏━━━━━━━━━
+┏━━♰ 𝙏𝙊𝙊𝙇𝙎 𝘾𝙈𝘿 ♰━━
 ┃/encrypt
 ┃/arab
 ┃/about
-┃/help
-┗━━━━━━━━━`,
+┃/helP
+┗━━━━━━━━━
+┏━━♰ 𝙎𝙔𝙎𝙏𝙀𝙈 𝘾𝙈𝘿 ♰━━
+┃/ping
+┃/alive
+┃/status
+┃/pair
+┗━━━━━━━━━
+`,
         parse_mode: 'Markdown'
       }
     );
@@ -166,6 +173,20 @@ bot.command('arab', async (ctx) => {
 });
 bot.command('about', (ctx) => {
   ctx.reply('🤖 mr smile enc Bot is built with Node.js and hosted on Render.com');
+});
+
+bot.command('ping', (ctx) => {
+  const start = Date.now();
+  ctx.reply('🏓 Pinging...').then((sentMessage) => {
+    const end = Date.now();
+    const latency = end - start;
+    ctx.telegram.editMessageText(
+      sentMessage.chat.id,
+      sentMessage.message_id,
+      undefined,
+      `🏓 Pong! Response Time: ${latency} ms`
+    );
+  });
 });
 
 // Launch bot with long polling
