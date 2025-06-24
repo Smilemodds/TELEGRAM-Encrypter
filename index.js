@@ -175,19 +175,31 @@ bot.command('about', (ctx) => {
   ctx.reply('🤖 mr smile enc Bot is built with Node.js and hosted on Render.com');
 });
 
-bot.command('ping', (ctx) => {
+bot.command('ping', async (ctx) => {
   const start = Date.now();
-  ctx.reply('🏓 Pinging...').then((sentMessage) => {
-    const end = Date.now();
-    const latency = end - start;
-    ctx.telegram.editMessageText(
-      sentMessage.chat.id,
-      sentMessage.message_id,
-      undefined,
-      `🏓 Pong! Response Time: ${latency} ms`
-    );
-  });
+  const sent = await ctx.replyWithPhoto(
+    { url: 'https://files.catbox.moe/4ga40i.png' },
+    { caption: '⏳ Pinging bot...' }
+  );
+
+  const latency = Date.now() - start;
+
+  const message = `╭─『 *⚙️ MR SMILE ENC BOT PING* 』─╮
+│
+│ 🤖 *Bot:* Mr Smile ENC Bot
+│ 📶 *Ping:* ${latency} ms
+│ 🟢 *Status:* Active & Ready
+│
+╰────────────────────────╯`;
+
+  await ctx.telegram.editMessageCaption(
+    sent.chat.id,
+    sent.message_id,
+    null,
+    message
+  );
 });
+  
 
 // Launch bot with long polling
 bot.launch();
