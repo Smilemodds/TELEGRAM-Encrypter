@@ -128,8 +128,8 @@ bot.command('smile', async (ctx) => {
 ┏━━♰ 𝙎𝙔𝙎𝙏𝙀𝙈 𝘾𝙈𝘿 ♰━━
 ┃/ping
 ┃/alive
-┃/status
-┃/pair
+┃/version
+┃/id
 ┗━━━━━━━━━
 `,
         parse_mode: 'Markdown'
@@ -223,6 +223,33 @@ bot.command('version', async (ctx) => {
     }
   );
 });
+
+
+bot.command('id', async (ctx) => {
+  const chat = ctx.chat;
+  const start = Date.now();
+  const sent = await ctx.reply('🔍 Fetching chat info...');
+
+  const latency = Date.now() - start;
+
+  const message = `╭─『 *🤖 SMILE-AI CHAT INFO* 』─╮
+│
+│ 🆔 *Chat ID:* chat.id
+│ 🏷️ *Chat Type:*{chat.type}
+│ 👤 *Chat Title:* chat.title || 'N/A'
+│ 👥 *Username:*{chat.username ? '@' + chat.username : 'N/A'}
+│ 📶 *Latency:* ${latency} ms
+│
+╰────────────────────────╯`;
+
+  await ctx.telegram.editMessageText(
+    sent.chat.id,
+    sent.message_id,
+    undefined,
+    message
+  );
+});
+
 
 
 bot.command('alive', async (ctx) => {
