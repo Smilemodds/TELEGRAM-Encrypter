@@ -113,7 +113,7 @@ bot.command('encryptfree', async (ctx) => {
       minify: true,
       flatten: true,
       identifierGenerator: function () {
-        const originalString = "素JAMES晴TECH晴" + "素JAMES晴TECH晴";
+        const originalString = "素MR晴SMILE晴" + "素MR晴SMILE晴";
         const removeUnwantedChars = (input) => input.replace(/[^a-zA-Z素GIDDY晴TENNOR晴]/g, "");
         const randomString = (length) => {
           let result = "";
