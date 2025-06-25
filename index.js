@@ -199,37 +199,19 @@ bot.command('smile', async (ctx) => {
     ctx.reply('Failed to load menu.');
   }
 });
-bot.command('arab', async (ctx) => {
-  const reply = (text) => ctx.reply(text);
 
-  if (!ctx.message.document || !ctx.message.document.file_name.endsWith('.js')) {
-    return reply('❌ Please upload a .js file with this command.');
-  }
 
-  try {
-    const fileId = ctx.message.document.file_id;
-    const fileLink = await ctx.telegram.getFileLink(fileId);
+bot.command('id', (ctx) => {
+  const user = ctx.from;
+  const message = `🆔 *Your Telegram Info*
 
-    const res = await fetch(fileLink.href);
-    const jsCode = await res.text();
+👤 Name: user.first_name{user.last_name || ''}
+🔰 Username: @user.username || 'N/A'
+🆔 ID:{user.id}`;
 
-    await reply('🔐 Applying Arab-style encryption...');
-
-    const transformed = arabEncrypt(jsCode);
-
-    const filePath = path.join(__dirname, 'arab_encrypted.js');
-    fs.writeFileSync(filePath, transformed);
-
-    await ctx.replyWithDocument({ source: filePath, filename: 'arab_encrypted.js' }, {
-      caption: `🔒 Encrypted using Arab-style scrambling.\nNot secure, but confusing! 😎`,
-    });
-
-    fs.unlinkSync(filePath);
-  } catch (err) {
-    console.error(err);
-    reply('❌ Arab encryption failed.');
-  }
+  ctx.reply(message, { parse_mode: 'Markdown' });
 });
+
 bot.command('about', (ctx) => {
   ctx.reply('🤖 mr smile enc Bot is built with Node.js and hosted on Render.com');
 });
