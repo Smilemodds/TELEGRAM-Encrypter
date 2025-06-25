@@ -23,29 +23,89 @@ function arabEncrypt(jsCode) {
   return transformed;
 }
 // /start command
-bot.start((ctx) => {
-  ctx.reply('👋 𝐇𝐄𝐋𝐋𝐎 𝐖𝐄𝐋𝐂𝐎𝐌𝐄 𝐓𝐎 𝐌𝐑 𝐒𝐌𝐈𝐋𝐄 𝐄𝐍𝐂 𝐁𝐎𝐓 !\n𝐓𝐘𝐏𝐄 /smile 𝐓𝐎 𝐒𝐄𝐄 𝐌𝐘 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒.');
+
+bot.start(async (ctx) => {
+  await ctx.replyWithPhoto(
+    { url: 'https://files.catbox.moe/4ga40i.png' },
+    {
+      caption: `╭─『 *🤖 𝙈𝙍 𝙎𝙈𝙄𝙇𝙀 𝙀𝙉𝘾 𝘽𝙊𝙏* 』─╮
+│
+│ 👋 *Hello ${ctx.from.first_name || 'there'}!*
+│ 
+│ I'm an advanced Telegram bot created by *Mr Smile*.
+│
+│ 📜 Type */smile* to explore my features.
+│
+╰────────────────────────╯`,
+      parse_mode: 'Markdown'
+    }
+  );
 });
-bot.command('encrypt', async (ctx) => {
+
+bot.command('arabfree', async (ctx) => {
   const reply = (text) => ctx.reply(text);
 
-  // Check if a document is attached
-  if (!ctx.message.document || !ctx.message.document.file_name.endsWith('.js')) {
-    return reply('❌ Please upload a .js file with this command.');
+  const replied = ctx.message.reply_to_message;
+  const fromId = ctx.from.id;
+
+  // Must reply to a .js file
+  if (!replied || !replied.document || !replied.document.file_name.endsWith('.js')) {
+    return reply('❌ Please reply to a `.js` file with `/arab`.');
+  }
+
+  // Only the original sender can run this
+  if (replied.from.id !== fromId) {
+    return reply('⚠️ Only the person who uploaded the file can encrypt it.');
   }
 
   try {
-    // Download the document
-    const fileId = ctx.message.document.file_id;
+    const fileId = replied.document.file_id;
     const fileLink = await ctx.telegram.getFileLink(fileId);
-    
+
     const res = await fetch(fileLink.href);
     const jsCode = await res.text();
 
-    // Inform user
+    await reply('🔐 Applying Arab-style encryption...');
+
+    const transformed = arabEncrypt(jsCode);
+
+    const filePath = path.join(__dirname, 'arab_encrypted.js');
+    fs.writeFileSync(filePath, transformed);
+
+    await ctx.replyWithDocument({ source: filePath, filename: 'arab_encrypted.js' }, {
+      caption: `🔒 Encrypted using Arab-style scrambling.\nNot secure, but confusing! 😎`,
+    });
+
+    fs.unlinkSync(filePath);
+  } catch (err) {
+    console.error(err);
+    reply('❌ Arab encryption failed.');
+  }
+});
+bot.command('encryptfree', async (ctx) => {
+  const reply = (text) => ctx.reply(text);
+
+  const replied = ctx.message.reply_to_message;
+  const fromId = ctx.from.id;
+
+  // Must reply to a .js file
+  if (!replied || !replied.document || !replied.document.file_name.endsWith('.js')) {
+    return reply('❌ Please reply to a `.js` file with `/encrypt`.');
+  }
+
+  // Only the original sender of the file can encrypt
+  if (replied.from.id !== fromId) {
+    return reply('⚠️ Only the person who uploaded the file can encrypt it.');
+  }
+
+  try {
+    const fileId = replied.document.file_id;
+    const fileLink = await ctx.telegram.getFileLink(fileId);
+    const res = await fetch(fileLink.href);
+    const jsCode = await res.text();
+
     await reply('🔐 Encrypting your JavaScript file...');
 
-    // Obfuscate the code
     const obfuscated = await obfuscate(jsCode, {
       target: "node",
       preset: "high",
@@ -53,8 +113,8 @@ bot.command('encrypt', async (ctx) => {
       minify: true,
       flatten: true,
       identifierGenerator: function () {
-        const originalString = "素MR晴SMILE晴" + "素MR晴SMILE晴";
-        const removeUnwantedChars = (input) => input.replace(/[^a-zA-Z素MR晴SMILE晴]/g, "");
+        const originalString = "素JAMES晴TECH晴" + "素JAMES晴TECH晴";
+        const removeUnwantedChars = (input) => input.replace(/[^a-zA-Z素GIDDY晴TENNOR晴]/g, "");
         const randomString = (length) => {
           let result = "";
           const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -86,16 +146,13 @@ bot.command('encrypt', async (ctx) => {
       globalConcealing: true,
     });
 
-    // Save to a temp file
-    const filePath = path.join(__dirname, 'Smile.js');
+    const filePath = path.join(__dirname, 'james.js');
     fs.writeFileSync(filePath, obfuscated);
 
-    // Send the file back
     await ctx.replyWithDocument({ source: filePath, filename: 'encrypted.js' }, {
-      caption: `✅ Successfully Encrypted\n• Type: Hard Obfuscation\n• From: SMILE ENC BOT`,
+      caption: `✅ Successfully Encrypted\n• Type: Hard Obfuscation\n• From: JamesTech`,
     });
 
-    // Clean up
     fs.unlinkSync(filePath);
 
   } catch (error) {
@@ -103,6 +160,8 @@ bot.command('encrypt', async (ctx) => {
     reply('❌ Encryption failed. Please try again.');
   }
 });
+
+
 // /help command
 bot.command('help', (ctx) => {
   ctx.reply('Available Commands:\n/start - Welcome Message\n/help - Show this help\n/about - About this bot');
